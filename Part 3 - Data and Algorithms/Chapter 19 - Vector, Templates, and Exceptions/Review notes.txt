@@ -1,0 +1,59 @@
+1.We desire the possibility to change the size of a vector when we deal with an unknown 
+  quantity of data.
+
+2.We want different element types for different containers because it's extremely useful,
+  and containers are always needed for many programs.
+
+3.We don't do that because, first of all, nobody knows the needs of the program being 
+  written, and also, in many cases, it could mean a waste of resources and memory.
+
+4. 8 slots of spare space are allocated for a new vector.
+
+5.We must copy vector elements to a new location when the size of the vector reaches the 
+  maximum amount of space allocated (size = space). We do this to be able to have a variable
+  size.
+
+6.The vector operation which can change a vector size after construction: resize(); 
+  push_back(); operator=();
+
+7.A copied vector will have the same attributes of the vector assigned to it except for the 
+  fact that the location of its elements is different, and no spare space is allocated.
+
+8.The operations that define copy for vector are: vector& operator=(const vector&); 
+  vector(const vector&);
+
+9.The default meaning of copy for a class object is fully copying all attributes.
+
+10.A template is a mechanism that allows a programmer to use types as parameters for a class 
+   or function.
+
+11.The two most useful types of template arguments are types and integers.
+
+12.Generic programming is writing a program that works with a variety of types presented as 
+   arguments, as long as those argument types meet specific syntactic and semantic 
+   requirements.
+
+13.Generic programming has compile-time resolution of objects and OOP uses 
+   runtime-resolution of objects.
+
+14.Array is an efficient, fixed size container. Vector is a dynamic, less-efficient 
+   container.
+
+15.The std::array does not decay to a pointer when passed as a function argument.
+
+16.Reserve() only allocates more space while resize() actually initializes the space and the
+   extra space is a part of the vector.
+
+17.A resource is something limited that we can use such as memory, threads, files, sockets(?)
+   that we must give back for an efficient program to run.
+
+18.A resource leak is allocated resources that aren't given back before the objects with 
+   handles to them are destroyed.
+
+19.RAII stands for resource acquisition is initialization. It is a guideline that suggests 
+   we encapsulate resource acquisition inside of constructors and return resources in 
+   destructors. It addresses the possibility of forgetting to return resources manually by 
+   automating the return.
+
+20.A unique_ptr is an RAII-compliant pointer. It is an object that holds a pointer that will 
+   clean up after itself when it goes out of scope.

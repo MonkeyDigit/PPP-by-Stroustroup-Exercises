@@ -1,0 +1,51 @@
+1."Caveat Emptor!" is a latin phrase that roughly translates to "let the buyer beware", 
+  and it is the principle that the buyer purchases at his own risk.
+
+2.With the default copy operation, all class members are copied identically as they are, 
+  including pointers, which can be undesired.
+
+3.The default meaning of copying is appropriate when the class doesn't deal with pointers or 
+  references. It's inappropriate when it implies a double deletion which causes a memory 
+  leak.
+
+4.A copy constructor is a constructor that takes as its argument a reference to the object 
+  from which to copy, and it is called when we try to initialize a class with another, in 
+  in case the constructor has been defined, otherwise the default copy is performed.
+
+5.A copy assignment is a memberwise copy of the class like the copy constructor, with the 
+  exception that the objects have been previously declared already.
+
+6.With copy assignment we deal with objects that have been previously declared, while with 
+  copy initialization we declare an object with a copy of another one.
+
+7.A shallow copy is a copy by which a pointer assumes the address of another pointer, which 
+  means that even though we have 2 pointers, they refer to the same object. We have a deep 
+  copy, instead, when a pointer copies the content of another pointer but points to another 
+  object in memory, so they are distinct.
+
+8.A copy of a vector is identical to the original vector except that the two have different 
+  location in memory (different addresses).
+
+10.An explicit constructor takes only one argument, and accepts (when constructing a class 
+   object) only the usual constructor semantics and not the implicit conversions. It is
+   preferred to use it when the implicit conversion is unclear or ambiguous (Ex. vector v=10;
+   makes a vector of 10 elements).
+
+11.We can implicitly use the assignment or also implicitly pass a class object in a function.
+
+12.An array is a sequence or group of objects allocated on the free store,  which are 
+   distinguished by an index.
+
+13.Because arrays can't be copied neither with a copy constructor nor copy assignment, they 
+   can be copied only with a loop that copies each element.
+
+14.An array can be initialized by just specifying type, name and number of elements, or with
+   an initializer list, where the size can be omitted (Ex. int a[3]; int a[3] {1,2,3};
+   int a[] {1,2,3};).
+
+15.We should prefer a pointer over a reference argument when nullptr is a valid argument 
+   and we should remember to check for it (17.9.1).
+
+16.A C-style string is an array of characters terminated by a zero.
+
+17.A palindrome is a word that when reversed it's still spelled the same as before.

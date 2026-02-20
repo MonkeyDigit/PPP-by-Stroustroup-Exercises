@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33205.214
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Text-based interface for FLTK", "Text-based interface for FLTK.vcxproj", "{485BB734-186A-4E7E-83E7-428B31A51E17}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{485BB734-186A-4E7E-83E7-428B31A51E17}.Debug|x64.ActiveCfg = Debug|x64
+		{485BB734-186A-4E7E-83E7-428B31A51E17}.Debug|x64.Build.0 = Debug|x64
+		{485BB734-186A-4E7E-83E7-428B31A51E17}.Debug|x86.ActiveCfg = Debug|Win32
+		{485BB734-186A-4E7E-83E7-428B31A51E17}.Debug|x86.Build.0 = Debug|Win32
+		{485BB734-186A-4E7E-83E7-428B31A51E17}.Release|x64.ActiveCfg = Release|x64
+		{485BB734-186A-4E7E-83E7-428B31A51E17}.Release|x64.Build.0 = Release|x64
+		{485BB734-186A-4E7E-83E7-428B31A51E17}.Release|x86.ActiveCfg = Release|Win32
+		{485BB734-186A-4E7E-83E7-428B31A51E17}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F74126D3-86CE-4195-9E4E-889DEECDDF60}
+	EndGlobalSection
+EndGlobal

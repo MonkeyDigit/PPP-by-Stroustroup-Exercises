@@ -1,0 +1,416 @@
+//IMPORTANT: Doesn't work because of some complications of stringstream (applies to file streams as well)
+#include "Simple_window.h"
+#include "Graph.h"
+#include "GUI.h"
+#include "std_lib_facilities.h"
+
+struct Token {			//A token can be an operator, number or command, a number can be expressed either with an explicit value or a variable which contains it
+	char kind;			//kind of token: of type number, operator, name (for variables), declaration, print and quit
+	double value;		//value of token assigned only if it's a number
+	string name;		//name for variables
+	//Constructors for constructing token
+	Token(char ch) :kind(ch), value(0) { }					//for functions that represent themselves (operators, commands)
+	Token(char ch, double val) :kind(ch), value(val) { }	//for numbers 
+	Token(char ch, string n) :kind(ch), name(n) { }			//for variables (type name, name)
+};
+
+
+//TOKEN STREAM CLASS------------------------------------------------
+class Token_stream {
+public:
+	Token_stream() :full(0), buffer(0) { }	//constructor
+
+	Token get(stringstream& ss);					//function to get tokens
+	void unget(Token t) { buffer = t; full = true; }		//renamed putback function: puts tokens back in the input stream via the buffer
+
+	void ignore(char, stringstream&);					//ignores all characters before a ';' in case of error, and continue calculating
+
+private:			//private unget variables
+	bool full;
+	Token buffer;
+};
+
+const char let = 'L';				//declaration token type
+const char assign = 'A';			//assignment type
+const char constch = 'C';			//for declaring constants, only used in declaration() and get()
+const char sq_root = 'R';			//square root type
+const char powc = 'P';				//powchar for power type
+const char print = ';';				//print type
+const char number = '8';			//number type
+const char name = 'a';				//name type
+
+const char declkey = '#';			//declaration key
+const char asskey = '@';			//assignment key
+const char constkey = '[';			//const declaration key
+const string sqrtkey = "sqrt";		//square root key sqrt(x)
+const string powkey = "pow";		//power key pow(b,e) or just pow(b)
+
+//FUNCTION DECLARATIONS-------------------------------------------------------------------------------------------------
+void clean_up_mess(Token_stream& ts, stringstream& ss);			//To continue calculating after an error
+string calculate(Token_stream& ts, stringstream& ss);				//Handle Input and Output of statements
+double statement(Token_stream& ts, stringstream& ss);				//Handle expression and declarations
+double expression(Token_stream& ts, stringstream& ss);			//Handle set of operands [+;-]
+double term(Token_stream& ts, stringstream& ss);					//Handle set of operands [*;/]
+double primary(Token_stream& ts, stringstream& ss);				//Handle numbers, parenthesis and variables
+double declaration(Token_stream& ts, stringstream& ss);			//Handle declarations
+double assignment(Token_stream& ts, stringstream& ss);			//Handle assignments
+//for declarations and assignments
+struct Variable;				//Variable type
+//vector<Variable> vnames;		//vector of type Variable to store the variables
+bool is_declared(string s);		//Check if a variable has been declared already
+bool is_aconst(string s);		//Check if s is the name of a constant
+struct Constant;				//Constant types
+//vector<Constant> cnames;		//Constant vector (declared later)
+double get_value(string s);		//Read the expression of a variable
+void set_value(string s, double d); //Set the variable's value
+
+struct Calculator_window : Window {
+	Calculator_window(Point xy, int w, int h, const string& title);
+private:
+	Button quit_button;
+	Button calculate_button;
+	In_box value_in;
+	Out_box value_out;
+
+	void quit_pressed() { hide(); }
+	void calculate_pressed();
+};
+
+Calculator_window::Calculator_window(Point xy, int w, int h, const string& title)
+	: Window{ xy,w,h,title },
+	quit_button{ Point(x_max() - 70, 0), 70, 20, "Quit", [](Address, Address pw) {reference_to<Calculator_window>(pw).quit_pressed(); } },
+	calculate_button{ Point(x_max() - 170, 0), 90, 20, "Calculate", [](Address, Address pw) {reference_to<Calculator_window>(pw).calculate_pressed(); } },
+	value_in{ Point(160,y_max() / 3 - 10),120,20,"Input expression: " },
+	value_out{ Point(340,y_max() / 3 - 10),120,20,"Result: " }
+{
+	attach(quit_button);
+	attach(calculate_button);
+	attach(value_in);
+	attach(value_out);
+	value_out.put("no input");
+}
+
+void Calculator_window::calculate_pressed()
+{
+	stringstream expression;
+	expression << value_in.get_string();
+	Token_stream ts;
+	if(expression.str().size()>0)
+		value_out.put(calculate(ts, expression));
+}
+//todo
+// remove print ;
+//MAIN----------------------------------------------------------------------------------------------
+int main()
+{
+	using namespace Graph_lib;
+
+	Point tl(150, 150);
+	constexpr int xmax = 600;
+	constexpr int ymax = 600;
+	Calculator_window calc_win{ tl,xmax,ymax,"Visual calculator" };
+	return gui_main();
+}
+
+void Token_stream::ignore(char c, stringstream& ss)
+{
+	if (full && c == buffer.kind) {
+		full = false;
+		return;
+	}
+	full = false;
+
+	char ch;
+	while (ss >> ch)			//this loop eats all input after an error is caught, and to continue evaluation, it seeks for c (in this case it will be print)
+		if (ch == c) return;	//and exits the loop only after it is found
+}
+
+
+void clean_up_mess(Token_stream& ts, stringstream& ss)
+{
+	ts.ignore(print,ss);
+}
+
+//-----------------------------------------------------------------
+Token Token_stream::get(stringstream& ss)		//class method defined outside of class. [type classname :: func name()]
+{
+	if (full) { full = false; return buffer; }		//if the buffer is full, return the buffer as token
+	char ch;
+	ss >> ch;
+	switch (ch) {				//cases for operators and commands implemented in the program
+	case declkey:				//return a decl type token
+		return Token(let);
+	case asskey:
+		return Token(assign);
+	case constkey:
+		return Token(constch);
+	case print:
+	case '(':
+	case ')':
+	case '+':
+	case '-':
+	case '*':
+	case '/':
+	case '%':
+	case '=':
+	case ',':
+		return Token(ch);		//let each character represent themselves
+	case '.':
+	case '0':
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+	case '7':
+	case '8':
+	case '9':
+	{	ss.unget();			//if the token is a number, insert it into o double variable
+	double val;
+	ss >> val;
+	return Token(number, val);	//NOTE: if input is "5;" val is going to assume 5, and in the istream, NOT Token stream, there will be left the ;
+	}
+	default:
+		if (isalpha(ch) || ch == '_') {		//isalpha() checks that the (first) character is exclusively a letter of the alphabet
+			string s;						//for variables (they can't start with a number or operator)
+			s += ch;														//start building a string
+			while (ss.get(ch) && (isalpha(ch) || isdigit(ch) || ch == '_')) s += ch;		//until ch is a letter or number, add it to the name
+			ss.unget();											//istream function, same as putback
+			//if (s == declkey) return Token(let);						//if s= declkey, return a token which of kind let, to declare a variable
+			if (s == sqrtkey)						//if the users write the sqrt, if they also enter '(' then it means they want to use the sqrt() function
+			{										//and return a token of type square root
+				ss >> ch;
+				if (ch == '(') return Token(sq_root);
+				ss.unget();						//if not, then it might just be a variable name, so proceed as normal
+			}
+			if (s == powkey)						//same logic as the square root above
+			{
+				ss >> ch;
+				if (ch == '(') return Token(powc);
+				ss.unget();
+			}
+			return Token(name, s);						//else it might be a variable name, so kind: name (const type defined earlier in line 34), and name: s
+		}
+		error("Bad token");		//gets executed if ch is not a number, a letter, or an implemented function(es. ! is factiorial), for example '@'
+	}							//note:factorial not implemented yet
+}
+
+//HANDLE PRIMARIES------------------------------------------------
+double primary(Token_stream& ts,stringstream& ss)
+{
+	Token t = ts.get(ss);
+	switch (t.kind) {					//Token's kind based on the input
+	case '(':									//Write an expression when opening parenthesis			
+	{	double d = expression(ts,ss);
+	t = ts.get(ss);
+	if (t.kind != ')') error("')' expected");	//Must close parenthesis after the expression
+	return d;
+	}
+	case '-':						//Negative numbers
+		return -primary(ts,ss);
+	case number:					//Positive numbers
+		return t.value;
+	case name:						//Return the constant or variable's value after confronting its name
+		return get_value(t.name);
+	case sq_root:					//if the token returned is of type sq_root, it means 'sqrt(' has been entered already, so just ask for the expression and ')'
+	{
+		double b = expression(ts,ss);
+		if (b < 0) error("Negative root");
+		double sq = sqrt(b);
+		t = ts.get(ss);
+		if (t.kind != ')') error("')' expected");
+		return sq;
+	}
+	case powc:						//in this case, if the user enters pow(b,e), it returns b^e, if it's just pow(b) then it returns b^2
+	{
+		double b = expression(ts,ss);
+		t = ts.get(ss);
+		if (t.kind == ')') return pow(b, 2);
+		if (t.kind != ',') error("',' expected in pow()");
+		double e = expression(ts,ss);
+		t = ts.get(ss);
+		if (t.kind != ')') error("')' expected in pow()");
+		return pow(b, e);
+	}
+	default:
+		error("primary expected");	//This is theoretically never executed, because character errors are already handled by get(). Can be disputed
+	}
+}
+
+//HANDLE TERMS----------------------------------------------------
+double term(Token_stream& ts, stringstream& ss)
+{
+	double left = primary(ts,ss);
+	while (true) {
+		Token t = ts.get(ss);
+		switch (t.kind) {
+		case '*':								//Handle multiplications
+			left *= primary(ts,ss);
+			break;
+		case '/':								//Handle divisions, throw an error when trying to divide by zero
+		{	double d = primary(ts,ss);
+		if (d == 0) error("divide by zero");
+		left /= d;
+		break;
+		}
+		case '%':
+		{
+			double d = primary(ts,ss);
+			if (d == 0) error("divide by zero");
+			left = fmod(left, d);
+			break;
+		}
+		case name:					//error("Unknown operand");	//If i input "2bc", without this, it would ouput 2 and then give an error for bc as a variable;
+			left *= get_value(t.name);
+			break;
+		default:
+			ts.unget(t);						//Put back the token in the Token stream to use it in other functions ( just expression() )
+			return left;
+		}
+	}
+}
+
+//HANDLE EXPRESSIONS----------------------------------------------
+double expression(Token_stream& ts, stringstream& ss)
+{
+	double left = term(ts,ss);
+	while (true) {			//Switch inside loop to keep calculating unless we want to print or quit
+		Token t = ts.get(ss);
+		switch (t.kind) {
+		case '+':			//Handle addition
+			left += term(ts,ss);
+			break;
+		case '-':			//Handle subtraction
+			left -= term(ts,ss);
+			break;
+		default:
+			ts.unget(t);	//Put back token
+			return left;
+		}
+	}
+}
+
+//VARIABLE STRUCT--------------------------------------------------
+struct Variable {								//STRUCTS are like classes but its members are public by default. in this case it was appropriate as
+	string name;								//there weren't any functions to be used exclusive to variables
+	double value;
+	Variable(string n, double v) :name(n), value(v) { }		//variable constructor to declare variables and store them
+};
+Vector<Variable> vnames;
+//CONSTANT STRUCT-------------------------------------------------
+struct Constant {
+	string name;
+	const double value;
+	Constant(string n, double v) :name(n), value(v) { }
+};
+vector<Constant> cnames
+{ Constant("pi",3.1415926535897932384626433832795028841971693993751058209),
+Constant("e",2.7182818284),
+Constant("k",1000) };
+
+//HANDLE VARIABLE DECLARATIONS------------------------------------
+double declaration(Token_stream& ts, stringstream& ss)
+{
+	Token t = ts.get(ss);
+	bool decl_const = false;
+	if (t.kind == constch)
+	{
+		decl_const = true;
+		t = ts.get(ss);
+	}
+	if (t.kind != name) error("name expected in declaration");			//Variable's names must start with a letter
+	string sname = t.name;
+	if (is_declared(sname)) error(sname, " declared twice");				//Check whether the variable is already declared or not. Throw an error if so
+	if (is_aconst(sname)) error("Can't redefine a constant");
+	Token t2 = ts.get(ss);
+	if (t2.kind != '=') error("= missing in declaration of ", sname);	//After entering "let name" (name as example), an expression must be assigned with '='
+	double d = expression(ts,ss);
+	if (decl_const)
+		cnames.push_back(Constant(sname, d));
+	else
+		vnames.push_back(Variable(sname, d));							//Enter an expression, and then add a variable with name as the name, and d as the value
+	return d;
+}
+
+//HANDLE ASSIGNMENT-----------------------------------------------
+double assignment(Token_stream& ts, stringstream& ss)
+{
+	Token t = ts.get(ss);
+	if (t.kind != name) error("name expected in assignment");
+	string sname = t.name;
+	if (is_aconst(sname)) error("assign: can't redefine constants");
+	if (!is_declared(sname)) error("assign: undeclared name");
+	Token t2 = ts.get(ss);
+	if (t2.kind != '=') error("assign: '=' expected");
+	double d = expression(ts,ss);
+	set_value(sname, d);
+	return d;
+
+}
+
+//FIND THE VARIABLE'S VALUE----------------------------------------
+double get_value(string s)
+{
+	for (int i = 0; i < vnames.size(); ++i)				//this loop is used to extrapolate the value of a variable, by confronting a name to all variables stored
+		if (vnames[i].name == s) return vnames[i].value;	//if the variable is actually stored in the vector, return its value, else throw an error
+
+	for (int i = 0; i < cnames.size(); ++i)
+		if (cnames[i].name == s) return cnames[i].value;
+	error("get: undefined name ", s);
+}
+
+//SET THE VARIABLE'S VALUE-----------------------------------------
+void set_value(string s, double d)
+{
+	for (int i = 0; i < vnames.size(); ++i)
+		if (vnames[i].name == s) {
+			vnames[i].value = d;
+			return;
+		}
+	error("set: undefined name ", s);
+}
+
+//DETERMINE IF A VARIABLE IS ALREADY DECLARED--------------------
+bool is_declared(string s)
+{
+	for (int i = 0; i < vnames.size(); ++i)
+		if (vnames[i].name == s) return true;
+	return false;
+}
+
+//DETERMINE IF S IS THE NAME OF A CONSTANT-------------------------
+bool is_aconst(string s)
+{
+	for (int i = 0; i < cnames.size(); ++i)
+		if (cnames[i].name == s) return true;
+}
+
+//HANDLE STATEMENTS------------------------------------------------
+double statement(Token_stream& ts, stringstream& ss)
+{
+	Token t = ts.get(ss);			//STATEMENTS: Declarations; Expressions.
+	switch (t.kind) {
+	case let:					//If the first input is of type let, then it means a declaration is to be done
+		return declaration(ts,ss);
+	case assign:					//for assignments
+		return assignment(ts,ss);
+	default:
+		ts.unget(t);			//else pass that token to expression()
+		return expression(ts,ss);
+	}
+}
+
+string calculate(Token_stream& ts, stringstream& ss)
+{
+	stringstream res;
+	try 
+	{
+		res << statement(ts, ss);
+	}
+	catch (runtime_error& e) {			//Error handling
+		cerr << "error: " << e.what() << endl;
+		clean_up_mess(ts,ss);
+	}
+	return res.str();
+}

@@ -1,0 +1,5 @@
+{ 1.0 Einstein { Bohr Darwin Einstein Lavoisier Newton Turing } 1 }
+{ 1.1 Bohr { Bohr Darwin Einstein Lavoisier Newton Turing } 1 }
+{ 1.2 Hawking { Bohr Darwin Einstein Lavoisier Newton Turing } 0 }
+{ 1.3 darwin { Bohr Darwin Einstein Lavoisier Newton Turing } 0 }
+{ 1.4 Eintsein { Bohr Darwin Einstein Lavoisier Newton Turing } 0 }

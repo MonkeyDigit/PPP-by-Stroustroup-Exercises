@@ -1,0 +1,64 @@
+1.Radiotherapy - wrong electron output: 1 person dead; Milions of dollars in repairs. 
+  Bank servers - wrong bills and counts; Economic problems.
+
+2.We can't just prove our programs correct because testing can prove the presence of errors,
+  not their absence. This means that even if no errors were found (yet), it doesn't mean we 
+  have considered every possibility.
+
+3.A unit can be a part of a program, which is the system, and it can be something like a 
+  class or function. So unit testing is testing a unit in isolation to see if it works 
+  properly. System testing then consists in testing the interactions between the units.
+
+4.Regression testing is done after modifying the code of a unit or system, and it is done to
+  check if errors that may have appeared in previous tests are still fixed. It lets us 
+  determine if the modification was good or not.
+
+5.The purpose of testing is to verify that a program behaves as expected by the programmer.
+
+6.The binary_search function doesn't check its requirements because that would defeat the 
+  purpose of the function in the first place, that is, to be an fast algorithm. Some 
+  requirements must be checked beforehand.
+
+7.Unless our program is extremely simple, the best thing we can do is to check for likely 
+  errors, and bad errors that may not be likely but would probably cause many problems.
+
+8.Loops are where bugs are most likely to occur in code manipulating sequences of elements.
+
+9.Testing for large values can be useful to detect overflow errors.
+
+10.Representing test as data is better because it keeps the code cleaner and easier to read,
+   and allows us to preserve any test that produced interesting results.
+
+11.If we design our own tests then we might overlook bugs multiple times.
+
+12.It is harder to test a program using a GUI because many of the outputs are graphical in 
+   nature and thus tough to automate the testing of.
+
+13.To test a unit in isolation you need a specification of what the unit is meant to do, 
+   some mock data, and a known output for comparing against.
+
+14.If you have a number of tests that you can run, if you port your application to another 
+   system the tests can reveal any inconsistencies in the interfaces.
+
+15.Ideally a function has clear parameters, return values and a singular behaviour. A class 
+   may be a sub-class, require state, and have many member functions to test.
+
+16.Repeatability of tests ensures that if a bug occurs, it's possible to reproduce it and 
+   thus find the cause.
+
+17.When a test relies on unchecked assumptions (ex: the sequence must be sorted) the tester 
+   may wrap the function in another test that also tests the assumptions. This wrapper may 
+   be activated only when testing so that the wrapper doesn't affect final app performance.
+
+18.A designer can think about their code from the perspective that it will be tested and 
+   design it to be easier to test.
+
+19.Debugging is solving problems after they occur, often at the system level. Testing is 
+   ensuring the parts do what they're supposed to do and hopefully prevents large system 
+   bugs.
+
+20.Performance matters when a program needs to be faster.
+
+21.You can create performance bottle-necks with code that unneccessarily reads the same 
+   sequence multiple times to retrieve the same result, and re-calculating values that you 
+   already have the answer for in previous code.

@@ -1,0 +1,1 @@
+Hello, i am inside binary input! 1234

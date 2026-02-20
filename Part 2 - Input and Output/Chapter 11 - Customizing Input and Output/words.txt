@@ -1,0 +1,3 @@
+This is the file to take the words from, so it will include things for testing like quotes:
+"Hello, this is a quote, a very nice-quote".
+Let's see what words it will include in the dictionary, hoping it works well.

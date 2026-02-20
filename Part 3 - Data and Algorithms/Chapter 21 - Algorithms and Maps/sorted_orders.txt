@@ -1,0 +1,10 @@
+{"Albert Ross" "Road 1" "code12" ("Oil truck" 300.99 20) ("HP pc" 340 14) ("Money" 10.5 26)}
+{"Darth Vader" "Naboo" "code200" ("Deathstar" 5500.99 1) ("Soldier" 10.5 100) ("Blaster" 40.99 100) ("Lightsaber" 1000 4)}
+{"Dwayne Johnson" "Washington 37" "code92" ("Weight" 145.2 3) ("Hair wig" 3.99 1)}
+{"John smith" "House street 1" "code1" ("Fire truck" 1000.99 2) ("Lenovo pc" 349.99 12) ("Water hose" 49.99 20)}
+{"Kerbal guy" "Planet Kerbin" "code86" ("Spaceship" 2000.99 13) ("Astronaut" 5.99 50) ("Plane" 3500 2) ("Car wheel" 25.99 4)}
+{"Mark Wayne" "Strauss 5" "code54" ("Water truck" 20.99 4) ("House" 40 1)}
+{"Michael white" "Water road 12" "code46" ("Lego castle" 3400.5 7) ("Playstation 4" 250.3 1) ("Nintendo psp" 10.49 31) ("Water bottle" 1.4 1)}
+{"Obi-Wan Kenobi" "Tatooine" "code38" ("Blue milk" 10.5 4) ("Green bread" 4.99 8) ("Plastic cup" 5.42 5)}
+{"Oliver Etcher" "Whitehouse 64" "code25" ("Air truck" 400.99 24) ("Mermaid" 229.99 30)}
+{"Thomas Robinson" "Treesway 12" "code82" ("Money truck" 100.99 31) ("Alcohol" 9.99 45) ("Sand" 41.89 10)}

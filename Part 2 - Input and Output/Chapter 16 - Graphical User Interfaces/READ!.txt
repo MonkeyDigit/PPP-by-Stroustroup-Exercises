@@ -1,0 +1,3 @@
+In these projects, some header files and cpp files have been modified (Graph.h,Graph.cpp,GUI.h,GUI.cpp) because some 
+tools were broken or entirely missing. 
+Changes have been done to make the Menu widget work, and to be able to use initializer lists for open_polyline and Marks etc..

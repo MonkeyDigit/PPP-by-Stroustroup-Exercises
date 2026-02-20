@@ -1,0 +1,39 @@
+Working our way through these topics, we cover the programming techniques 
+called procedural programming (as with the C programming language), data 
+abstraction, object-oriented programming, and generic programming. The main 
+topic of this book is programming, that is, the ideals, techniques, and tools of expressing ideas in code. The C++ programming language is our main tool, so we 
+describe many of C++’s facilities in some detail. But please remember that C++ 
+is just a tool, rather than the main topic of this book. This is “programming using 
+C++,” not “C++ with a bit of programming theory.”
+Each topic we address serves at least two purposes: it presents a technique, 
+concept, or principle and also a practical language or library feature. For example, 
+we use the interface to a two-dimensional graphics system to illustrate the use of 
+classes and inheritance. This allows us to be economical with space (and your 
+time) and also to emphasize that programming is more than simply slinging code 
+together to get a result as quickly as possible. The C++ standard library is a major 
+source of such “double duty” examples — many even do triple duty. For example, 
+we introduce the standard library vector, use it to illustrate widely useful design 
+techniques, and show many of the programming techniques used to implement it. 
+One of our aims is to show you how major library facilities are implemented and 
+how they map to hardware. We insist that craftsmen must understand their tools, 
+not just consider them “magical.”
+Some topics will be of greater interest to some programmers than to others. 
+However, we encourage you not to prejudge your needs (how would you know 
+what you’ll need in the future?) and at least look at every chapter. If you read this 
+book as part of a course, your teacher will guide your selection.
+We characterize our approach as “depth-first.” It is also “concrete-first” and 
+“concept-based.” First, we quickly (well, relatively quickly, Chapters 1–11) assemble a set of skills needed for writing small practical programs. In doing so, we present a lot of tools and techniques in minimal detail. We focus on simple concrete 
+code examples because people grasp the concrete faster than the abstract. That’s 
+simply the way most humans learn. At this initial stage, you should not expect 
+to understand every little detail. In particular, you’ll find that trying something 
+slightly different from what just worked can have “mysterious” effects. Do try, 
+though! And please do the drills and exercises we provide. Just remember that 
+early on you just don’t have the concepts and skills to accurately estimate what’s 
+simple and what’s complicated; expect surprises and learn from them.
+We move fast in this initial phase — we want to get you to the point where you 
+can write interesting programs as fast as possible. Someone will argue, “We must 
+move slowly and carefully; we must walk before we can run!” But have you ever 
+watched a baby learning to walk? Babies really do run by themselves before they 
+learn the finer skills of slow, controlled walking. Similarly, you will dash ahead, 
+occasionally stumbling, to get a feel of programming before slowing down to gain 
+the necessary finer control and understanding. You must run before you can walk!

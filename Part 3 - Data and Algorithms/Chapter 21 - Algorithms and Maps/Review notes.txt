@@ -1,0 +1,69 @@
+1.There are many examples of useful STL algorithms. The first ones that come to my mind are 
+  sort(), find(), accumulate(), copy() etc...
+
+2.The function find() requires three arguments: an iterator that points to the start of the 
+  sequence, another one that points to the element past the last one, and the value to find.
+  if the value searched is found in the sequence, find() returns an iterator that points to 
+  that element in the sequence, otherwise it returns the iterator that points to one element 
+  beyond the last one.
+  Since it works with iterators, it can be used for all types of containers that utilize 
+  them, and as a bonus, this also lets you search for values in parts of the container 
+  instead of all of it.
+
+3.The function count_if(), given a bool function passed as argument, counts all elements in
+  a sequence defined in the range [b:e), that when inserted in that function return true.
+
+4.sort(b,e) confronts elements using the '<' operator (less than).
+
+5.An STL algorithm takes a container as an input argument by taking its begin() iterator and
+  its end() iterator.
+
+6.An STL algorithm takes a container as an output argument by only taking its begin() 
+  iterator. This is because we don't need to know its size to write to it.
+
+7.An STL algorithm indicates a failure or "not found" by returning an iterator to the 
+  one-beyond-the-last element of a sequence.
+
+8.A function object is a function that, since it's declared as a class, can store a value but 
+  can also work as a function by adding () as a suffix.
+
+9.As i previously said, function objects can also be initialized with values and store them, 
+   while normal functions can't store values.
+
+10.A predicate is a function that returns true or false, and it's required for various STL
+   algorithms where the programmer can specify a condition. (Ex. find_if, count_if)
+
+11.accumulate() sums the elements stored in a container, and returns the result.
+
+12.inner_product() multiplies each element of a container with those that have the same 
+   subscript of another container (v1[i]*v2[i]), sums the products, and returns the result.
+
+13.Associative containers are containers that work with keys which can be used to search for
+   values. Some examples are map, unordered_map and set.
+
+14.list is not an associative container because it stores one type of elements that can't be
+   used as keys.
+
+15.Each node in the binary tree points to a left and right node.
+
+16.It means that all equally distanced nodes have the same number of left and right nodes.
+
+17.An element in a map stores its key, the value and pointers to two descendent nodes. That 
+   amounts to two words of overhead (16 bytes).
+
+18.A vector element only takes up enough space for its value.
+
+19.A person might prefer an unordered_map if they will be doing a lot of lookups in a large 
+   sequence and they don't need ordered traversal.
+
+20.In a set each Node stores only the keys.
+
+21.A multimap is a map where a key can appear multiple times.
+
+22.We could just write a loop for copying but STL algorithms are as fast as can be written 
+   by hand and are debugged and optimized for us.
+
+23.A binary search cuts a sorted sequence in half and then in half again, comparing along 
+   the way to determine which half to look at next.
+
+23.
